@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Cadastro de Animes</title>
+</head>
+<body>
+<h1> Cadastro de Animes</h1>
+<form action="#" th:action="@{/salvar}" method="post" th:object="${anime}">
+	Título: <input type="text" th:field="*{titulo}"/><br />
+	Categoria: <input type="text" th:field="*{categoria}" /><br />
+	Descrição: <input type="text" th:field="*{descricao}" /><br />
+	Ano: <input type="number" th:field="*{anoLancamento}"/><br />
+	<button type="submit"> Salvar </button>
+</form>
+</body>
+</html>

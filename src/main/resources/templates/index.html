@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Animes</title>
+</head>
+<body>
+
+<h1> Lista de Animes</h1>
+<a href="/cadastrar"> Cadastrar Anime</a>
+<br />
+<br />
+
+<table>
+	<thead>
+	<tr>
+		<th>ID</th>
+		<th>Título</th>
+		<th>Categoria</th>
+		<th>Descrição</th>
+		<th>Lançamento</th>
+		<th>Ações</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr th:each="anime : ${animeList}" th:object="${anime}">
+			<td th:text="*{id}">ID</td>
+			<td th:text="*{titulo}">Título</td>
+			<td th:text="*{categoria}">Categoria</td>
+			<td th:text="*{descricao}">Descrição</td>
+			<td th:text="*{anoLancamento}">Lançamento</td>
+			<td>
+				<a th:href="@{'/editar/' + ${anime.id}}">Editar</a> &nbsp; &nbsp; &nbsp;
+				<a th:href="@{'/deletar/' + ${anime.id}}">Deletar</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>
+
+
+<!--
+<p th:text="${#request.getParameter('q')}" th:unless="${#request.getParameter('q') == null}">Test</p>
+<p th:text="${#servletContext}">[...]</p>
+<p th:text="${#request.getContentLength()}">[...]</p>
+-->
