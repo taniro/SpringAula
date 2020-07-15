@@ -3,13 +3,15 @@ package tads.eaj.aula;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -24,6 +26,9 @@ public class AnimeController {
 
 	@RequestMapping("/")
 	public String getHome(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		session.setAttribute("opa", "Aula");
+		request.getCookies();
 		List<Anime> animeList = animeService.findAll();
 		model.addAttribute("animeList", animeList);
 		return "index";
@@ -37,9 +42,13 @@ public class AnimeController {
 	}
 
 	@RequestMapping(value = "/salvar", method = RequestMethod.POST)
-	public String addAnime(@ModelAttribute Anime anime){
-		animeService.add(anime);
-		return "redirect:/";
+	public String addAnime(@ModelAttribute @Valid Anime anime, Errors errors){
+		if (errors.hasErrors()){
+			return "cadastrar";
+		}else{
+			animeService.add(anime);
+			return "redirect:/";
+		}
 	}
 
 	@RequestMapping("/editar/{id}")
@@ -55,4 +64,25 @@ public class AnimeController {
 		animeService.delete(id);
 		return "redirect:/";
 	}
+
+	@RequestMapping("/setcookies")
+	public String gravaCookie(HttpServletResponse response){
+		Cookie c = new Cookie("nome", "marcos");
+		response.addCookie(c);
+		return "cookies";
+	}
+
+
+	@RequestMapping("/readcookies")
+	public String lerCookie(@CookieValue(value = "nome", defaultValue = "taniro") String nome){
+		System.out.println(nome);
+		return "cookies";
+	}
+
+	@RequestMapping("/testes")
+	public String testes(Model model){
+		model.addAttribute("aula", "rapaz...");
+		return "testes";
+	}
+
 }
